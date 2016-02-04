@@ -3,9 +3,7 @@
 #' author: "Jonas Schöley"
 #' date: "February 2nd, 2016"
 #' output:
-#'   md_document:
-#'     variant: markdown_github
-#'     preserve_yaml: TRUE
+#'   github_document
 #' ---
 
 library(ggplot2)
