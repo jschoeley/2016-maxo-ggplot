@@ -45,7 +45,7 @@ ggplot(data = ChickWeight) +
 
 #' What happened? ggplot interpreted the quoted strings as raw data instead of
 #' variable names of our data frame. It then tries to plot it... When **referring
-#' to the variables in your data fame, always use unqoted column names**.
+#' to the variables in your data fame, always use unquoted column names**.
 #'
 #' Let's colour all of the lines blue:
 
@@ -139,7 +139,6 @@ ggplot(ChickWeight, aes(x = Time, y = weight, color = Diet)) +
 #'   introduced in this book. If you are eager to learn where `ggplot` comes
 #'   from, look here.
 
+sessionInfo()
 
 #' cc-by Jonas Schöley 2016
-
-sessionInfo()
