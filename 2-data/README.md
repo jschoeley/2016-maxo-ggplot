@@ -168,7 +168,7 @@ long
     ## 3   Male 3
     ## 4   Male 4
 
-Back to our telephone example. We told the computer to look at all columns apart from `year` and transform them into the columns `cont` and `n`. `cont` holds the continent names for the variable `n`, the number of telephone connections. The continent names are taken from the original column names we *gathered* over.
+Back to our telephone example. We told the computer to look at all columns apart from `year` and transform them into the columns `cont` and `n`. `cont` holds the continent names for the variable `n`, the number of telephone connections. The continent names ar<!-- -->e taken from the original column names we *gathered* over.
 
 We now can plot our data easily.
 
@@ -177,7 +177,7 @@ ggplot(phones) +
   geom_line(aes(x = year, y = n, colour = cont))
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-10-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 Data Pipelines
 --------------
@@ -207,7 +207,7 @@ WorldPhones %>%
   geom_line(aes(x = year, y = n, colour = cont))
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-11-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 Practice, practice, practice...
 -------------------------------
@@ -228,7 +228,7 @@ USArrests %>%
   geom_point(aes(x = UrbanPop, y = state))
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 ``` r
 # we start with raw data...
@@ -247,7 +247,7 @@ USArrests %>%
   geom_point(aes(x = rate, y = state, colour = crime))
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-2.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-2.png)
 
 ``` r
 library(ggrepel) # brilliant package for labelling points in a scatterplot
@@ -264,7 +264,7 @@ USArrests %>%
   geom_point()
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-3.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-12-3.png)
 
 Can you figure out what happens here? Try running the code yourself line by line.
 
@@ -280,7 +280,7 @@ anscombe %>%
   facet_wrap(~panel)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-13-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 Facets
 ------
@@ -295,7 +295,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   geom_density()
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-14-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 After specifying the facetting variable (`~case`) multiple panels are drawn, one for each subgroup in the variable.
 
@@ -306,7 +306,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(~case)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-15-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 We can facet over multiple variables.
 
@@ -317,7 +317,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(education~case)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-16-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
 There are various ways to layout the panels. Variables that should end up as rows are specified on the left of the tilde, columns on the right.
 
@@ -328,7 +328,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(case~education)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-17-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 ``` r
 infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
@@ -337,7 +337,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(~case + education)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-17-2.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-17-2.png)
 
 By default each panel has identical x and y axis. Most of the time this is what we want because it facilitates comparisons between the different panels. However, we do have the options of letting either x or y or both scales vary freely between panels.
 
@@ -349,7 +349,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(case~education, scales = "free_x")
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 ``` r
 # different y axis by row
@@ -359,7 +359,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(case~education, scales = "free_y")
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-2.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-2.png)
 
 ``` r
 # different x axis by column; different y axis by row
@@ -369,9 +369,9 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_grid(case~education, scales = "free")
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-3.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-18-3.png)
 
-Up until now we have use `facit_grid`. This is perfect for crosstable-like layouts but does not allow us to specify the number of rows/columns or to have varying scales by panel. We use `facet_wrap` if we want to control the number of rows or columns or if we want separate scales for each panel.
+Up until now we have use `facet_grid`. This is perfect for crosstable-like layouts but does not allow us to specify the number of rows/columns or to have varying scales by panel. We use `facet_wrap` if we want to control the number of rows or columns or if we want separate scales for each panel.
 
 ``` r
 # different x and y axis by panel, 3 columns please
@@ -381,7 +381,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_wrap(case~education, scales = "free", ncol = 3)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-19-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-19-1.png)
 
 We can use specialized functions that change the way our panels are labelled.
 
@@ -393,7 +393,7 @@ infert %>% mutate(case = ifelse(case == 0, "control", "case")) %>%
   facet_wrap(case~education, scales = "free", ncol = 3, labeller = label_both)
 ```
 
-![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-20-1.png)<!-- -->
+![](2016-02-09-data_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
 Further Reading
 ---------------
