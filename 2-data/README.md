@@ -168,7 +168,7 @@ long
     ## 3   Male 3
     ## 4   Male 4
 
-Back to our telephone example. We told the computer to look at all columns apart from `year` and transform them into the columns `cont` and `n`. `cont` holds the continent names for the variable `n`, the number of telephone connections. The continent names ar<!-- -->e taken from the original column names we *gathered* over.
+Back to our telephone example. We told the computer to look at all columns apart from `year` and transform them into the columns `cont` and `n`. `cont` holds the continent names for the variable `n`, the number of telephone connections. The continent names are taken from the original column names we *gathered* over.
 
 We now can plot our data easily.
 
