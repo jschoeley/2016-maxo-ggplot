@@ -1,5 +1,10 @@
 GGplot Workshop: Session 1, Introduction
-========================================
+================
+Jonas Schöley
+February 2nd, 2016
+
+-   [First Steps: Data, Layers, Aestetics](#first-steps-data-layers-aestetics)
+-   [Further Reading](#further-reading)
 
 First Steps: Data, Layers, Aestetics
 ------------------------------------
@@ -32,7 +37,7 @@ is.data.frame(ChickWeight)
 ggplot(data = ChickWeight)
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
 ggplot knows about our data but nothing happens yet. We need to add a *layer*. **We add elements to a plot by adding them with a `+`.**
 
@@ -41,7 +46,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = Time, y = weight))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
 `aes` stands for *aestetics*: Mappings between variables in our data and visual properties. Each column in our data frame is a variable. Visual properties are manifold and can be `x`, `y`, `colour`, `size`, `shape`, `alpha`, `fill`, `radius`, `linetype`, `group`...
 
@@ -54,7 +59,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = Time, y = weight, group = Chick))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 Note that we don't write `x = ChickWeight$Time` or `y = "weight"`. We simply spell out the name of the variable we wish to work with. ggplot is aware of the dataset we work with. It is *attached*. Quoting the variable names would actually produce unexpected results:
 
@@ -63,7 +68,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = "Time", y = "weight"))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 What happened? ggplot interpreted the quoted strings as raw data instead of variable names of our data frame. It then tries to plot it... **Always use unquoted column names to adress the variables in your data.**
 
@@ -74,7 +79,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = Time, y = weight, group = Chick), colour = "blue")
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 We wrote `colour = "blue` outside of the `aes()` function as we *set* the visual property to a fixed value instead of *mapping* a visual property to a variable in the data frame. For comparision, let's move the colour specification into the `aes()` function:
 
@@ -83,7 +88,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = Time, y = weight, group = Chick, colour = "blue"))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 Classic ggplot moment here... "blue" gets interpreted as raw data as we have written it inside of the `aes()` function. ggplot thinks all of our rows belong to group "blue", mapped to the visual property colour. ggplot assigns a default colour scale of which the first colour is a light red. Here's the same behavior, but this time with a true group variable in our data:
 
@@ -92,7 +97,7 @@ ggplot(data = ChickWeight) +
   geom_line(aes(x = Time, y = weight, group = Chick, colour = Diet))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 Lesson to be learned: The difference between *mapping* and *setting* a visual property. **You map visual properties to variables inside `aes()`, you set visual properties to a fixed value outside of `aes()`.**
 
@@ -104,7 +109,7 @@ ggplot(data = ChickWeight) +
   geom_point(aes(x = Time, y = weight, group = Chick, colour = Diet))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 If we use identical mappings in our layers we can move them into the `ggplot()` function. **Everything inside the `ggplot()` function is passed down to all other plot elements.**
 
@@ -114,7 +119,7 @@ ggplot(data = ChickWeight, aes(x = Time, y = weight, group = Chick, colour = Die
   geom_point()
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 We can still add arguments to the individual layers.
 
@@ -124,7 +129,7 @@ ggplot(data = ChickWeight, aes(x = Time, y = weight, group = Chick, colour = Die
   geom_point(aes(shape = Diet))
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 Unlike real life, we also have the power to override commands from above:
 
@@ -134,7 +139,7 @@ ggplot(data = ChickWeight, aes(x = Time, y = weight, group = Chick, colour = Die
   geom_point(aes(shape = Diet), colour = "black")
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 ggplot wants you to combine a set of flexible elements to get the desired result, whatever it may be. **You are in charge of designing your plot**.
 
@@ -151,7 +156,7 @@ ggplot(ChickWeight, aes(x = Time, y = weight, color = Diet)) +
   facet_wrap(~Diet, labeller = label_both)
 ```
 
-![](2016-02-02-introduction_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](2016-02-02-session1-introduction_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 Further Reading
 ---------------

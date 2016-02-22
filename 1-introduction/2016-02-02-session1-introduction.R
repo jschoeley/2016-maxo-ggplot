@@ -3,7 +3,8 @@
 #' author: "Jonas Schöley"
 #' date: "February 2nd, 2016"
 #' output:
-#'   github_document
+#'   github_document:
+#'     toc: true
 #' ---
 
 #'## First Steps: Data, Layers, Aestetics

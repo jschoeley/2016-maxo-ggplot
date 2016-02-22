@@ -7,10 +7,10 @@
 #'     toc: true
 #' ---
 
-library("ggplot2") # right on!
-library("dplyr")   # data transformation
+library(ggplot2) # right on!
+library(dplyr)   # data transformation
 
-#'## Scales versus Aesthetics
+#'## Scales (Versus Aesthetics)
 #'
 #' Interactive plots displayed in a web-browser are all the rage nowadays with
 #' [Gapminder World](http://www.gapminder.org/world) being a true classic of
@@ -70,7 +70,7 @@ gapminder %>% filter(year == 2007) %>%
 #' 2) Am I dealing with a *discrete* or *continuous* variable?
 #' `scale_*_<continuous|discrete>`
 #'
-#'## Scale names
+#'## Scale Names
 
 #' Once you know which scales to use, names are trivial to change.
 
@@ -93,7 +93,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_color_discrete(name = "Continent") +
   scale_size_continuous(name = "Population, total")
 
-#'## Scale transformations
+#'## Scale Transformations
 
 #' Next, we deal with *scale transformations*. In **Gapminder World** the x-axis is
 #' log-scaled meaning that the log of the x-axis data is taken before plotting.
@@ -136,7 +136,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_color_discrete(name = "Continent") +
   scale_size_continuous(name = "Population, total", trans = "log10")
 
-#'## Breaks and labels
+#'## Scale Breaks and Labels
 
 #' Next, we manually specify the axis *breaks* and *labels* to be the same as in
 #' *Gapminder World*. Axis breaks are the positions where tick-marks and grid-lines
@@ -196,7 +196,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")}) +
+                     labels = function(x) ifelse(grepl("^[124]", x), x, "")) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5)) +
   scale_color_discrete(name = "Continent",
@@ -212,34 +212,26 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")}) +
+                     labels = function(x) ifelse(grepl("^[124]", x), x, "")) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5)) +
   scale_color_discrete(name = "Continent",
                        breaks = c("Asia", "Africa", "Americas", "Europe", "Oceania"),
                        labels = toupper) +
   scale_size_continuous(name = "Population, total",
-                        breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                        breaks = c(1E6, 10E6, 100E6, 1E9),
                         labels = function(x) format(x, big.mark = ",", scientific = FALSE))
 
-#'### Interlude: levels and order in ggplot
+#'### Sidenote: Levels and Order in ggplot
 
 #' It is easy to order items on a numerical scale. One just puts them on the
 #' number line. Usually low on the left and hight to the right. But what about
 #' discrete items? ggplot orders them according to the order of their factor
 #' levels. An example:
 
-# test data:
-#   id    sex
-#    1 Female
-#    2 Female
-#    3   Male
-#    4   Male
-foo <- data.frame(
-  id  = 1:4,
-  sex = c("Female", "Female", "Male", "Male")
-)
-
+# test data
+foo <- data.frame(id  = 1:4,
+                  sex = c("Female", "Female", "Male", "Male"))
 foo
 
 #' `data.frame`, just like ggplot, automatically converts a character vector to
@@ -272,7 +264,7 @@ foo$sex
 levels(foo$sex) <- c("Female", "Male")
 foo$sex
 
-#'## Limits
+#'## Scale Limits
 
 #' We match the maximum and minimum value of our xy-scales with those of the
 #' *Gapminder World* chart by specifying the *limits* of the scales.
@@ -283,7 +275,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")},
+                     labels = function(x) ifelse(grepl("^[124]", x), x, ""),
                      limits = c(200, 90000)) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5),
@@ -292,11 +284,11 @@ gapminder %>% filter(year == 2007) %>%
                        breaks = c("Asia", "Africa", "Americas", "Europe", "Oceania"),
                        labels = toupper) +
   scale_size_continuous(name = "Population, total",
-                        breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                        breaks = c(1E6, 10E6, 100E6, 1E9),
                         labels = function(x) format(x, big.mark = ",", scientific = FALSE))
 
 
-#'### Interlude: limiting versus zooming
+#'### Sidenote: Limiting versus Zooming
 
 #' Note that values outside of the limits will be discarded. This is of
 #' importance if you want to zoom into a plot. Here we "zoom" by changing the
@@ -327,7 +319,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")},
+                     labels = function(x) ifelse(grepl("^[124]", x), x, ""),
                      limits = c(200, 90000)) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5),
@@ -341,7 +333,7 @@ gapminder %>% filter(year == 2007) %>%
                                "Europe" = "#3F4FFF",
                                "Oceania" = "white")) +
   scale_size_area(name = "Population, total", max_size = 20,
-                  breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                  breaks = c(1E6, 10E6, 100E6, 1E9),
                   labels = function(x) format(x, big.mark = ",", scientific = FALSE)) +
   guides(fill = guide_legend(order = 1,
                              override.aes = list(shape = 22, size = 8))) +
@@ -356,7 +348,7 @@ gapminder %>% filter(year == 2007) %>%
 
 #' - [The ggplot documentation](http://docs.ggplot2.org/current/) contains
 #'   all the information about different scales and their options along
-#'   with examples.
+#'   with illustrated examples.
 #'  - [Adding themes to your plot](http://docs.ggplot2.org/dev/vignettes/themes.html)
 
 sessionInfo()

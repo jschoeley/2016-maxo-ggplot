@@ -3,19 +3,19 @@ GGplot Workshop: Session 3, Scales I
 Jonas Schöley
 February 16th, 2016
 
--   [Scales versus Aesthetics](#scales-versus-aesthetics)
--   [Scale names](#scale-names)
--   [Scale transformations](#scale-transformations)
--   [Breaks and labels](#breaks-and-labels)
-    -   [Interlude: levels and order in ggplot](#interlude-levels-and-order-in-ggplot)
--   [Limits](#limits)
-    -   [Interlude: limiting versus zooming](#interlude-limiting-versus-zooming)
+-   [Scales (Versus Aesthetics)](#scales-versus-aesthetics)
+-   [Scale Names](#scale-names)
+-   [Scale Transformations](#scale-transformations)
+-   [Scale Breaks and Labels](#scale-breaks-and-labels)
+    -   [Sidenote: Levels and Order in ggplot](#sidenote-levels-and-order-in-ggplot)
+-   [Scale Limits](#scale-limits)
+    -   [Sidenote: Limiting versus Zooming](#sidenote-limiting-versus-zooming)
 -   [And they say every ggplot looks the same](#and-they-say-every-ggplot-looks-the-same)
 -   [Further Reading](#further-reading)
 
 ``` r
-library("ggplot2") # right on!
-library("dplyr")   # data transformation
+library(ggplot2) # right on!
+library(dplyr)   # data transformation
 ```
 
     ## 
@@ -29,8 +29,8 @@ library("dplyr")   # data transformation
     ## 
     ##     intersect, setdiff, setequal, union
 
-Scales versus Aesthetics
-------------------------
+Scales (Versus Aesthetics)
+--------------------------
 
 Interactive plots displayed in a web-browser are all the rage nowadays with [Gapminder World](http://www.gapminder.org/world) being a true classic of the genre.
 
@@ -82,7 +82,7 @@ gapminder %>% filter(year == 2007) %>%
   geom_point()
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-3-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
 A solid foundation. But to close in on the *Gapminder World* chart we need to customize our scales.
 
@@ -91,7 +91,7 @@ A solid foundation. But to close in on the *Gapminder World* chart we need to cu
 1.  What aesthetic does the scale correspond to? `scale_<name of aestetic>_*`
 2.  Am I dealing with a *discrete* or *continuous* variable? `scale_*_<continuous|discrete>`
 
-Scale names
+Scale Names
 -----------
 
 Once you know which scales to use, names are trivial to change.
@@ -106,7 +106,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 You can also use mathematical annotation in your scale names. For further information consult `?plotmath`.
 
@@ -120,9 +120,9 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
-Scale transformations
+Scale Transformations
 ---------------------
 
 Next, we deal with *scale transformations*. In **Gapminder World** the x-axis is log-scaled meaning that the log of the x-axis data is taken before plotting. However, the labels remain on the linear scale. In that regard transforming scales is different from directly transforming the underlying data.
@@ -138,7 +138,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 There are many different scale transformations built into ggplot. From the documentation:
 
@@ -155,7 +155,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 Note that the concept of scale transformations is not limited to position scales.
 
@@ -170,10 +170,10 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total", trans = "log10")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
-Breaks and labels
------------------
+Scale Breaks and Labels
+-----------------------
 
 Next, we manually specify the axis *breaks* and *labels* to be the same as in *Gapminder World*. Axis breaks are the positions where tick-marks and grid-lines are drawn. Labels specify what text to put at the breaks. **Breaks and labels have to be vectors of equal length.**
 
@@ -202,7 +202,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 OK, that was effective but clumsy. Luckily ggplot does not care *how* we generate the vector of breaks. We can use any R function as long as it outputs a vector. Even better, instead of manually spelling out the labels for each break we can write a short function that takes the breaks as input and formats them. Much nicer code -- same result.
 
@@ -220,7 +220,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 The concept of *breaks* and *labels* does not only apply to continuous axis. **All scales have breaks and labels**. E.g. on a colour scale the breaks are the colour keys, the labels are -- well -- the labels. **We reorder the items on our discrete scale by specifying the breaks in the required order.** We also use an R function to capitalize the labels.
 
@@ -231,7 +231,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")}) +
+                     labels = function(x) ifelse(grepl("^[124]", x), x, "")) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5)) +
   scale_color_discrete(name = "Continent",
@@ -240,7 +240,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_size_continuous(name = "Population, total")
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-11-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-11-1.png)
 
 Finally, let's choose some sensible breaks and labels for the size scale.
 
@@ -251,35 +251,27 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")}) +
+                     labels = function(x) ifelse(grepl("^[124]", x), x, "")) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5)) +
   scale_color_discrete(name = "Continent",
                        breaks = c("Asia", "Africa", "Americas", "Europe", "Oceania"),
                        labels = toupper) +
   scale_size_continuous(name = "Population, total",
-                        breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                        breaks = c(1E6, 10E6, 100E6, 1E9),
                         labels = function(x) format(x, big.mark = ",", scientific = FALSE))
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
-### Interlude: levels and order in ggplot
+### Sidenote: Levels and Order in ggplot
 
 It is easy to order items on a numerical scale. One just puts them on the number line. Usually low on the left and hight to the right. But what about discrete items? ggplot orders them according to the order of their factor levels. An example:
 
 ``` r
-# test data:
-#   id    sex
-#    1 Female
-#    2 Female
-#    3   Male
-#    4   Male
-foo <- data.frame(
-  id  = 1:4,
-  sex = c("Female", "Female", "Male", "Male")
-)
-
+# test data
+foo <- data.frame(id  = 1:4,
+                  sex = c("Female", "Female", "Male", "Male"))
 foo
 ```
 
@@ -304,7 +296,7 @@ ggplot(foo) +
   geom_point(aes(x = sex, y = id, color = sex))
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
 If we reverse the level order of the sex variable we change the way ggplot orders the discrete items.
 
@@ -330,7 +322,7 @@ ggplot(foo) +
   geom_point(aes(x = sex, y = id, color = sex))
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-17-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 ``` r
 ggplot(foo) +
@@ -338,7 +330,7 @@ ggplot(foo) +
   facet_wrap(~sex)
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-17-2.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-17-2.png)
 
 **NEVER OVERRIDE THE LEVELS DIRECTLY WHEN JUST MEANING TO CHANGE THE ORDER!** You'll screw up your data. In our case we just changed the sex of the participants.
 
@@ -357,8 +349,8 @@ foo$sex
     ## [1] Male   Male   Female Female
     ## Levels: Female Male
 
-Limits
-------
+Scale Limits
+------------
 
 We match the maximum and minimum value of our xy-scales with those of the *Gapminder World* chart by specifying the *limits* of the scales.
 
@@ -369,7 +361,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")},
+                     labels = function(x) ifelse(grepl("^[124]", x), x, ""),
                      limits = c(200, 90000)) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5),
@@ -378,13 +370,13 @@ gapminder %>% filter(year == 2007) %>%
                        breaks = c("Asia", "Africa", "Americas", "Europe", "Oceania"),
                        labels = toupper) +
   scale_size_continuous(name = "Population, total",
-                        breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                        breaks = c(1E6, 10E6, 100E6, 1E9),
                         labels = function(x) format(x, big.mark = ",", scientific = FALSE))
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-19-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-19-1.png)
 
-### Interlude: limiting versus zooming
+### Sidenote: Limiting versus Zooming
 
 Note that values outside of the limits will be discarded. This is of importance if you want to zoom into a plot. Here we "zoom" by changing the limits of the scales...
 
@@ -398,7 +390,7 @@ gapminder %>% filter(year == 2007) %>%
 
     ## Warning: Removed 104 rows containing missing values (geom_point).
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-20-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
 ...and here we zoom by changing the limits of the coordinate system
 
@@ -409,7 +401,7 @@ gapminder %>% filter(year == 2007) %>%
   coord_cartesian(xlim = c(5000, 20000), ylim = c(70, 80))
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-21-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-21-1.png)
 
 And they say every ggplot looks the same
 ----------------------------------------
@@ -425,7 +417,7 @@ gapminder %>% filter(year == 2007) %>%
   scale_x_continuous(name = "Income per person (GDP/capita, PPP$ inflation-adjusted)",
                      trans = "log10",
                      breaks = apply(expand.grid(1:9, 10^(2:4)), 1, FUN = prod)[-1],
-                     labels = function(x) {ifelse(grepl("^[124]", x), x, "")},
+                     labels = function(x) ifelse(grepl("^[124]", x), x, ""),
                      limits = c(200, 90000)) +
   scale_y_continuous(name = "Life expectancy (years)",
                      breaks = seq(25, 85, 5),
@@ -439,7 +431,7 @@ gapminder %>% filter(year == 2007) %>%
                                "Europe" = "#3F4FFF",
                                "Oceania" = "white")) +
   scale_size_area(name = "Population, total", max_size = 20,
-                  breaks = c(1E6, 50E6, 100E6, 500E6, 1E9),
+                  breaks = c(1E6, 10E6, 100E6, 1E9),
                   labels = function(x) format(x, big.mark = ",", scientific = FALSE)) +
   guides(fill = guide_legend(order = 1,
                              override.aes = list(shape = 22, size = 8))) +
@@ -451,12 +443,12 @@ gapminder %>% filter(year == 2007) %>%
         legend.key = element_blank())
 ```
 
-![](2016-02-19-lesson3-scales1_files/figure-markdown_github/unnamed-chunk-22-1.png)
+![](2016-02-19-session3-scales1_files/figure-markdown_github/unnamed-chunk-22-1.png)
 
 Further Reading
 ---------------
 
--   [The ggplot documentation](http://docs.ggplot2.org/current/) contains all the information about different scales and their options along with examples.
+-   [The ggplot documentation](http://docs.ggplot2.org/current/) contains all the information about different scales and their options along with illustrated examples.
 -   [Adding themes to your plot](http://docs.ggplot2.org/dev/vignettes/themes.html)
 
 ``` r

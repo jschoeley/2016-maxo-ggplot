@@ -3,7 +3,8 @@
 #' author: "Jonas Schöley"
 #' date: "February 8th, 2016"
 #' output:
-#'   github_document
+#'   github_document:
+#'     toc: true
 #' ---
 
 #'## Every Variable In Its Own Column
