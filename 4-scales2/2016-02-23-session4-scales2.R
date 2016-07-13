@@ -23,7 +23,7 @@ library(readr)   # read csv directly from the web
 #'
 #' `geom_rect()` is faster and produces smaller pdf's, while `geom_tile()`
 #' allows to specify the dimensions of the rectangles making it useful for
-#' data that does not adhere to a 1 by 1 grid.
+#' data that does not come in single year period and age intervals.
 #'
 #' For now we will ignore the colouring aspect and just look at how ggplot draws
 #' rectangles.
@@ -33,7 +33,7 @@ library(readr)   # read csv directly from the web
 #' We work with data from the [Human Mortality
 #' Database](http://www.mortality.org) -- Swedish period mortality rates by sex.
 
-readr::read_csv("/home/jon/lucile/share/jowncloud/sci/teach/2016-maxo-ggplot/4-scales2/mortality_surface_sweden.csv") -> swe
+swe <- read_csv("https://raw.githubusercontent.com/jschoeley/2016-maxo-ggplot/master/4-scales2/mortality_surface_sweden.csv")
 swe
 
 #' Only specifying x and y position and omitting colour puts a grey rectangle at
@@ -43,7 +43,7 @@ swe
 
 swe %>% filter(Sex == "Female") %>%
   ggplot() +
-  geom_tile(aes(x = Year, y = Age), colour = "white")
+  geom_tile(aes(x = Year, y = Age))
 
 #' When constructing Lexis surfaces it is a good idea to use isometric scales.
 #' The distance corresponding to a single year should be the same on the x and
@@ -81,7 +81,7 @@ swe %>% filter(Sex == "Female") %>%
 #' the `width` and/or `height` of the rectangles. `width` and `height` are
 #' regular aesthetics and can be mapped to variables in the data.
 
-readr::read_csv("./lucile/share/jowncloud/sci/teach/2016-maxo-ggplot/4-scales2/cod.csv") -> cod
+cod <- read_csv("https://raw.githubusercontent.com/jschoeley/2016-maxo-ggplot/master/4-scales2/cod.csv")
 cod
 
 #' The Cause of Death data features age groups of different sizes (1, 4, or 5
@@ -91,7 +91,8 @@ cod
 cod %>% filter(Sex == "Female") %>%
   mutate(Year = Year + 0.5) %>%
   ggplot() +
-  geom_tile(aes(x = Year, y = Age), colour = "white") +
+  geom_tile(aes(x = Year, y = Age),
+            colour = "white") +
   coord_equal()
 
 #' Now we shift the rectangles away from the age midpoint and scale them
@@ -100,14 +101,15 @@ cod %>% filter(Sex == "Female") %>%
 cod %>% filter(Sex == "Female") %>%
   mutate(Year = Year + 0.5, Age = Age + w/2) %>%
   ggplot() +
-  geom_tile(aes(x = Year, y = Age, height = w), colour = "white") +
+  geom_tile(aes(x = Year, y = Age, height = w),
+            colour = "white") +
   coord_equal()
 
 #'### Discrete Period and Age Scales
 
 #' If we use discrete axis (happens automatically if we supply a non-numeric
 #' variable to the x or y aesthetic) we loose any control over the placement of
-#' the groups. They will be equally spaced along the axis.
+#' the age or period groups. They will be equally spaced along the axis.
 
 cod %>% filter(Sex == "Female") %>%
   mutate(Year = Year + 0.5, Age = AgeGr) %>%
@@ -115,30 +117,85 @@ cod %>% filter(Sex == "Female") %>%
   geom_tile(aes(x = Year, y = Age), colour = "white") +
   coord_equal()
 
-swe %>%
-  mutate(mx_cut = cut(mx, breaks = c(0, 0.0001, 0.001, 0.01, 0.1, Inf))) %>%
-  ggplot() +
-  geom_raster(aes(x = Year, y = Age, fill = mx_cut)) +
-  scale_fill_brewer(type = "seq") +
-  facet_grid(~Sex) +
-  guides(fill = guide_legend(reverse = TRUE)) +
-  coord_equal()
+#' **Avoid character or factor variables as your period or age groups.**
+#' Whenever possible go with numeric "Start of Interval" and "Interval Width"
+#' variables.
 
 #'## Sequential Colour Scales: Plotting Magnitudes
 
-#' Sequential scales come in
+#' If we plot magnitudes we would like to use a colour scale which has an
+#' intrinsic ordering to it. Scales that vary from dark to light are suitable
+#' and we call them "sequential". `scale_fill_brewer(type = "seq")` provides
+#' you with such a scale.
+
+breaks_mx <- c(0, 0.0001, 0.001, 0.01, 0.1, Inf)
+swe %>%
+  mutate(Year = Year + 0.5, Age = Age + 0.5,
+         mx_cut = cut(mx, breaks = breaks_mx)) %>%
+  ggplot() +
+  geom_tile(aes(x = Year, y = Age, fill = mx_cut)) +
+  scale_fill_brewer(type = "seq") +
+  facet_wrap(~Sex, ncol = 1) +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  coord_equal()
+
+swe %>%
+  mutate(Year = Year + 0.5, Age = Age + 0.5) %>%
+  ggplot() +
+  geom_tile(aes(x = Year, y = Age, fill = mx)) +
+  scale_fill_distiller(type = "seq", palette = "PuBuGn", direction = 1,
+                       breaks = breaks_mx,
+                       trans = "log10",
+                       values = c(0, 0.3, 0.4, 0.5, 0.6, 1),
+                       limits = c(0.001, 0.5),
+                       oob = scales::squish) +
+  facet_wrap(~Sex, ncol = 1) +
+  coord_equal()
 
 #'## Divergent Colour Scales: Plotting Differences & Proportions
 
+breaks_prop_mx <- c(0, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5, Inf)
+swe %>%
+  mutate(Year = Year + 0.5, Age = Age + 0.5) %>%
+  select(-Dx, -Nx) %>%
+  tidyr::spread(key = Sex, value = mx) %>%
+  mutate(fm_prop_mx = Female / Male,
+         fm_prop_mx_disc = cut(fm_prop_mx, breaks_prop_mx)) %>%
+  ggplot() +
+  geom_tile(aes(x = Year, y = Age, fill = fm_prop_mx_disc)) +
+  scale_fill_brewer(type = "div", palette = 5, direction = -1) +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  coord_equal() +
+  theme_dark()
+
+swe %>%
+  mutate(Year = Year + 0.5, Age = Age + 0.5) %>%
+  select(-Dx, -Nx) %>%
+  tidyr::spread(key = Sex, value = mx) %>%
+  mutate(fm_diff_mx = Female / Male) %>%
+  ggplot() +
+  geom_tile(aes(x = Year, y = Age, fill = fm_diff_mx)) +
+  # takes 6 colours from a brewer palette and interpolates
+  scale_fill_distiller(type = "div",
+                       palette = "RdBu",
+                       trans = "log2",
+                       limits = c(0.5, 2),
+                       oob = scales::squish) +
+  coord_equal()
+
 #'## Qualitative Colour Scales: Plotting Group Membership
 
-library(ggplot2) # right on...
-
-
+cod %>%
+  mutate(Year = Year + 0.5, Age = Age + w/2) %>%
+  ggplot() +
+  geom_tile(aes(x = Year, y = Age, height = w, fill = COD)) +
+  coord_equal() +
+  facet_wrap(~Sex, ncol = 2)
 
 #'## Further Reading
 
 #' - [Explore the colorbrewer palette](http://colorbrewer2.org/)
+#' - [A handy sheet showing all the brewer palettes](http://mkweb.bcgsc.ca/brewer/swatches/brewer-palettes-swatches.pdf)
 
 sessionInfo()
 
