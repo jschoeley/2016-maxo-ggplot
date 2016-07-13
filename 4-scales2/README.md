@@ -174,7 +174,12 @@ cod %>% filter(Sex == "Female") %>%
 
 ![](2016-02-23-session4-scales2_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-**Avoid character or factor variables as your period or age groups.** Whenever possible go with numeric "Start of Interval" and "Interval Width" variables. \#\# Sequential Colour Scales: Plotting Magnitudes If we plot magnitudes we would like to use a colour scale which has an intrinsic ordering to it. Scales that vary from dark to light are suitable and we call them "sequential". `scale_fill_brewer(type = "seq")` provides you with such a scale.
+**Avoid character or factor variables as your period or age groups.** Whenever possible go with numeric "Start of Interval" and "Interval Width" variables.
+
+Sequential Colour Scales: Plotting Magnitudes
+---------------------------------------------
+
+If we plot magnitudes we would like to use a colour scale which has an intrinsic ordering to it. Scales that vary from dark to light are suitable and we call them "sequential". `scale_fill_brewer(type = "seq")` provides you with such a scale.
 
 ``` r
 breaks_mx <- c(0, 0.0001, 0.001, 0.01, 0.1, Inf)
